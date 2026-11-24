@@ -1,0 +1,397 @@
+
+/* =====================================================
+   DEMANDIQ AI - PROFESSIONAL RESPONSIVE DASHBOARD
+   Compatible with your original app.py HTML
+===================================================== */
+
+/* ---------------- GLOBAL ---------------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    background: #F1F5F9;
+    color: #334155;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+}
+
+#react-entry-point,
+#_dash-app-content {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* ---------------- MAIN CONTAINER ---------------- */
+
+/* Targets the outermost app layout Div */
+
+#_dash-app-content > div {
+    width: 100%;
+    max-width: 1600px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 30px !important;
+    background: #F1F5F9 !important;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif !important;
+}
+
+/* ---------------- HEADER ---------------- */
+
+h1 {
+    color: #172554 !important;
+    font-size: 34px !important;
+    font-weight: 800 !important;
+    letter-spacing: -1px;
+    margin: 0 0 10px 0 !important;
+}
+
+#_dash-app-content > div > p {
+    color: #64748B;
+    font-size: 15px;
+    margin: 0 0 20px 0;
+    line-height: 1.6;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #E2E8F0;
+    margin: 25px 0;
+}
+
+/* ---------------- KPI CARDS ---------------- */
+
+#kpi-cards {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px !important;
+    width: 100%;
+    margin: 20px 0;
+}
+
+/* Individual KPI cards */
+
+#kpi-cards > div {
+    background: #FFFFFF !important;
+    padding: 25px !important;
+    border-radius: 14px !important;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05) !important;
+    min-width: 0 !important;
+    transition: all 0.25s ease;
+}
+
+#kpi-cards > div:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.09) !important;
+}
+
+/* KPI headings */
+
+#kpi-cards h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748B;
+    margin: 0 0 12px 0;
+}
+
+/* KPI values */
+
+#kpi-cards h2 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #2563EB;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+/* ---------------- DROPDOWN SECTION ---------------- */
+
+#series-dropdown {
+    width: 100%;
+}
+
+#_dash-app-content label {
+    display: block;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+#_dash-app-content .Select-control,
+#_dash-app-content .Select-menu-outer,
+#_dash-app-content .Select--single {
+    border-radius: 9px;
+}
+
+#_dash-app-content .Select-control {
+    min-height: 44px;
+    border: 1px solid #CBD5E1;
+}
+
+#_dash-app-content .Select-control:hover {
+    border-color: #2563EB;
+}
+
+#_dash-app-content .Select-placeholder,
+#_dash-app-content .Select-value-label {
+    line-height: 42px;
+    font-size: 14px;
+}
+
+/* Dropdown menu */
+
+#_dash-app-content .Select-menu-outer {
+    z-index: 1000;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* ---------------- CHART SECTIONS ---------------- */
+
+/* Original chart container styles */
+
+#_dash-app-content > div > div:has(> #forecast-chart),
+#_dash-app-content > div > div:has(> #model-chart),
+#_inventory-section {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 22px !important;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+    width: 100%;
+    min-width: 0;
+}
+
+/* Chart headings */
+
+#_dash-app-content h3 {
+    color: #172554;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 18px 0;
+}
+
+/* Plotly responsive sizing */
+
+#forecast-chart,
+#model-chart,
+#forecast-chart .js-plotly-plot,
+#model-chart .js-plotly-plot,
+.js-plotly-plot,
+.plot-container {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+.js-plotly-plot .main-svg {
+    max-width: 100%;
+}
+
+/* ---------------- INVENTORY TABLE ---------------- */
+
+#inventory-table {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+#inventory-table table {
+    width: 100%;
+    min-width: 650px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+/* Table header */
+
+#inventory-table th {
+    background: #F1F5F9;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 15px;
+    border-bottom: 2px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+/* Table rows */
+
+#inventory-table td {
+    padding: 14px 15px;
+    color: #334155;
+    font-size: 13px;
+    border-bottom: 1px solid #E2E8F0;
+    white-space: nowrap;
+}
+
+#inventory-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+#inventory-table tbody tr:hover {
+    background: #F8FAFC;
+}
+
+/* Empty messages */
+
+#inventory-table p {
+    color: #64748B;
+    font-size: 14px;
+    padding: 15px 0;
+}
+
+/* ---------------- SPACING ---------------- */
+
+/* Style existing html.Br elements */
+
+#_dash-app-content br {
+    display: block;
+    content: "";
+    margin-top: 10px;
+}
+
+/* ---------------- TABLET RESPONSIVENESS ---------------- */
+
+@media screen and (max-width: 992px) {
+
+    #_dash-app-content > div {
+        padding: 10px !important;
+    }
+
+    #kpi-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px !important;
+    }
+
+    #kpi-cards > div {
+        padding: 10px !important;
+    }
+
+    #kpi-cards h2 {
+        font-size: 27px;
+    }
+
+    #_dash-app-content > div > div:has(> #forecast-chart),
+    #_dash-app-content > div > div:has(> #model-chart) {
+        padding: 18px !important;
+    }
+}
+
+/* ---------------- MOBILE RESPONSIVENESS ---------------- */
+
+@media screen and (max-width: 600px) {
+
+    #_dash-app-content > div {
+        padding: 14px !important;
+    }
+
+    h1 {
+        font-size: 27px !important;
+    }
+
+    #_dash-app-content > div > p {
+        font-size: 13px;
+    }
+
+    hr {
+        margin: 18px 0;
+    }
+
+    /* KPI cards */
+
+    #kpi-cards {
+        grid-template-columns: 1fr;
+        gap: 14px !important;
+        margin: 15px 0;
+    }
+
+    #kpi-cards > div {
+        padding: 20px !important;
+        border-radius: 11px !important;
+    }
+
+    #kpi-cards h4 {
+        font-size: 13px;
+    }
+
+    #kpi-cards h2 {
+        font-size: 25px;
+    }
+
+    /* Dropdown */
+
+    #_dash-app-content label {
+        font-size: 13px;
+    }
+
+    /* Charts */
+
+    #_dash-app-content > div > div:has(> #forecast-chart),
+    #_dash-app-content > div > div:has(> #model-chart) {
+        padding: 13px !important;
+        border-radius: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    #_dash-app-content h3 {
+        font-size: 17px;
+    }
+
+    #forecast-chart,
+    #model-chart {
+        min-width: 0;
+    }
+
+    /* Inventory */
+
+    #inventory-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #inventory-table table {
+        min-width: 650px;
+    }
+
+    #inventory-table th,
+    #inventory-table td {
+        padding: 12px;
+        font-size: 12px;
+    }
+}
+
+/* ---------------- SMALL MOBILE ---------------- */
+
+@media screen and (max-width: 380px) {
+
+    #_dash-app-content > div {
+        padding: 10px !important;
+    }
+
+    h1 {
+        font-size: 24px !important;
+    }
+
+    #kpi-cards h2 {
+        font-size: 23px;
+    }
+
+    #_dash-app-content > div > div:has(> #forecast-chart),
+    #_dash-app-content > div > div:has(> #model-chart) {
+        padding: 10px !important;
+    }
+}

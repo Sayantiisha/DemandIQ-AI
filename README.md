@@ -51,20 +51,21 @@ The dataset is not included in this repository.
 Clone the repository:
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-cd DemandIQ_AI
+git clone https://github.com/Sayantiisha/DemandIQ-AI.git
+cd DemandIQAI
 ```
 
 Create and activate a virtual environment:
 
-```bash
-python -m venv venv
+```powershell
+python -m venv demandiq
 ```
 
 Windows PowerShell:
 
 ```powershell
-.\venv\Scripts\Activate.ps1
+.\demandiq\Scripts\Activate.ps1
+
 ```
 
 Install dependencies:
@@ -102,7 +103,7 @@ Open `http://127.0.0.1:8050` in your browser.
 Run automated tests:
 
 ```bash
-pytest -v
+python -m pytest -v
 ```
 
 ### Important Limitations
