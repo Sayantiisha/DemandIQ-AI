@@ -9,6 +9,7 @@ from dash import Dash, dcc, html, Input, Output
 OUTPUT_DIR = Path("outputs")
 
 app = Dash(__name__)
+server = app.server
 app.title = "DemandIQ AI"
 
 
