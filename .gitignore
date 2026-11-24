@@ -1,0 +1,52 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environment
+demandiq/
+
+# Environment variables
+.env
+.env.*
+
+# IDE settings
+.vscode/
+.idea/
+
+# Raw and processed datasets
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model artifacts
+artifacts/*
+!artifacts/.gitkeep
+
+# Generated outputs
+outputs/*
+!outputs/.gitkeep
+
+# PyTorch Lightning logs
+lightning_logs/
+
+# Model files
+*.ckpt
+*.pth
+*.pt
+*.pkl
+*.joblib
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test and coverage
+.coverage
+htmlcov/
+
+# Operating system
+.DS_Store
+Thumbs.db
