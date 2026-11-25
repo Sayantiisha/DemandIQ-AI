@@ -10,8 +10,8 @@ html {
 }
 
 body {
-    margin: 0;
-    padding: 0;
+    margin: 15px;
+    padding: 10px;
     width: 100%;
     overflow-x: hidden;
     background: #F1F5F9;
@@ -27,7 +27,6 @@ body {
 
 /* ---------------- MAIN CONTAINER ---------------- */
 
-/* Targets the outermost app layout Div */
 
 #_dash-app-content > div {
     width: 100%;
