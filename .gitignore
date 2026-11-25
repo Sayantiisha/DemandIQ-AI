@@ -4,6 +4,8 @@ __pycache__/
 *.py[cod]
 *.egg-info/
 .pytest_cache/
+*.pyo
+*.pyd
 
 # Virtual environment
 demandiq/
@@ -26,9 +28,6 @@ data/processed/*
 artifacts/*
 !artifacts/.gitkeep
 
-# Generated outputs
-outputs/*
-!outputs/.gitkeep
 
 # PyTorch Lightning logs
 lightning_logs/

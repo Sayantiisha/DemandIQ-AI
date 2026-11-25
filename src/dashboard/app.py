@@ -1,298 +1,3 @@
-
-# from pathlib import Path
-
-# import pandas as pd
-# import plotly.express as px
-# from dash import Dash, dcc, html, Input, Output
-
-
-# OUTPUT_DIR = Path("outputs")
-
-# app = Dash(__name__)
-# server = app.server 
-# app.title = "DemandIQ AI"
-
-
-# def load_csv(filename):
-#     path = OUTPUT_DIR / filename
-
-#     if path.exists():
-#         return pd.read_csv(path)
-
-#     return pd.DataFrame()
-
-
-# forecasts = load_csv("lightgbm_predictions.csv")
-# inventory = load_csv("inventory_recommendations.csv")
-# comparison = load_csv("model_comparison.csv")
-
-
-# def metric_card(title, value):
-#     return html.Div(
-#         [
-#             html.H4(title),
-#             html.H2(value)
-#         ],
-#         style={
-#             "backgroundColor": "#ffffff",
-#             "padding": "20px",
-#             "borderRadius": "10px",
-#             "boxShadow": "0 2px 8px rgba(0,0,0,0.08)",
-#             "flex": "1",
-#             "minWidth": "180px"
-#         }
-#     )
-
-
-# app.layout = html.Div(
-#     style={
-#         "backgroundColor": "#f4f6fa",
-#         "minHeight": "100vh",
-#         "padding": "25px",
-#         "fontFamily": "Arial"
-#     },
-#     children=[
-
-#         html.H1(
-#             "DemandIQ AI",
-#             style={"color": "#172554"}
-#         ),
-
-#         html.P(
-#             "Retail Demand Forecasting & Inventory Optimization"
-#         ),
-
-#         html.Hr(),
-
-#         html.Div(
-#             id="kpi-cards",
-#             style={
-#                 "display": "flex",
-#                 "gap": "15px",
-#                 "flexWrap": "wrap"
-#             }
-#         ),
-
-#         html.Br(),
-
-#         html.Div(
-#             [
-#                 html.Label("Select Product / Store Series"),
-
-#                 dcc.Dropdown(
-#                     id="series-dropdown",
-#                     options=[],
-#                     placeholder="Select a series"
-#                 )
-#             ],
-#             style={"maxWidth": "500px"}
-#         ),
-
-#         html.Br(),
-
-#         html.Div(
-#             [
-#                 html.H3("Demand Forecast"),
-#                 dcc.Graph(id="forecast-chart")
-#             ],
-#             style={
-#                 "backgroundColor": "white",
-#                 "padding": "20px",
-#                 "borderRadius": "10px"
-#             }
-#         ),
-
-#         html.Br(),
-
-#         html.Div(
-#             [
-#                 html.H3("Model Performance"),
-#                 dcc.Graph(id="model-chart")
-#             ],
-#             style={
-#                 "backgroundColor": "white",
-#                 "padding": "20px",
-#                 "borderRadius": "10px"
-#             }
-#         ),
-
-#         html.Br(),
-
-#         html.Div(
-#             [
-#                 html.H3("Inventory Recommendations"),
-#                 html.Div(id="inventory-table")
-#             ],
-#             style={
-#                 "backgroundColor": "white",
-#                 "padding": "20px",
-#                 "borderRadius": "10px"
-#             }
-#         )
-#     ]
-# )
-
-
-# @app.callback(
-#     Output("kpi-cards", "children"),
-#     Input("series-dropdown", "value")
-# )
-# def update_kpis(selected_series):
-
-#     total_series = (
-#         forecasts["id"].nunique()
-#         if "id" in forecasts.columns else 0
-#     )
-
-#     total_forecast = (
-#         round(forecasts["prediction"].sum(), 2)
-#         if "prediction" in forecasts.columns else 0
-#     )
-
-#     total_orders = (
-#         int(inventory["recommended_order"].sum())
-#         if "recommended_order" in inventory.columns else 0
-#     )
-
-#     return [
-#         metric_card("Forecast Series", str(total_series)),
-#         metric_card("Total Predicted Demand", str(total_forecast)),
-#         metric_card("Recommended Order Units", str(total_orders))
-#     ]
-
-
-# @app.callback(
-#     Output("series-dropdown", "options"),
-#     Input("kpi-cards", "children")
-# )
-# def update_dropdown(_):
-
-#     if forecasts.empty or "id" not in forecasts.columns:
-#         return []
-
-#     return [
-#         {"label": series, "value": series}
-#         for series in sorted(forecasts["id"].astype(str).unique())
-#     ]
-
-
-# @app.callback(
-#     Output("forecast-chart", "figure"),
-#     Input("series-dropdown", "value")
-# )
-# def update_forecast(selected_series):
-
-#     if forecasts.empty:
-#         return px.line(title="Forecast data not found")
-
-#     data = forecasts.copy()
-
-#     if selected_series:
-#         data = data[
-#             data["id"].astype(str) == str(selected_series)
-#         ]
-
-#     data["date"] = pd.to_datetime(data["date"])
-
-#     fig = px.line(
-#         data,
-#         x="date",
-#         y="prediction",
-#         title="Predicted Daily Demand",
-#         markers=True
-#     )
-
-#     if "sales" in data.columns:
-#         fig.add_scatter(
-#             x=data["date"],
-#             y=data["sales"],
-#             mode="lines",
-#             name="Actual Sales"
-#         )
-
-#     return fig
-
-
-# @app.callback(
-#     Output("model-chart", "figure"),
-#     Input("series-dropdown", "value")
-# )
-# def update_model_chart(selected_series):
-
-#     if comparison.empty:
-#         return px.bar(title="Model comparison data not found")
-
-#     if not {"model", "WAPE"}.issubset(comparison.columns):
-#         return px.bar(title="Expected model/WAPE columns not found")
-
-#     return px.bar(
-#         comparison,
-#         x="model",
-#         y="WAPE",
-#         title="Model Comparison – WAPE",
-#         text_auto=".2f"
-#     )
-
-
-# @app.callback(
-#     Output("inventory-table", "children"),
-#     Input("series-dropdown", "value")
-# )
-# def update_inventory(selected_series):
-
-#     if inventory.empty:
-#         return html.P(
-#             "Inventory recommendations not found. Run inventory optimization first."
-#         )
-
-#     data = inventory.copy()
-
-#     if selected_series:
-#         data = data[
-#             data["id"].astype(str) == str(selected_series)
-#         ]
-
-#     columns = [
-#         "id",
-#         "demand",
-#         "current_inventory",
-#         "recommended_order",
-#         "expected_shortage",
-#         "expected_leftover"
-#     ]
-
-#     available_columns = [
-#         col for col in columns if col in data.columns
-#     ]
-
-#     return html.Table(
-#         [
-#             html.Thead(
-#                 html.Tr([
-#                     html.Th(col.replace("_", " ").title())
-#                     for col in available_columns
-#                 ])
-#             ),
-#             html.Tbody([
-#                 html.Tr([
-#                     html.Td(row[col])
-#                     for col in available_columns
-#                 ])
-#                 for _, row in data.head(20).iterrows()
-#             ])
-#         ],
-#         style={
-#             "width": "100%",
-#             "borderCollapse": "collapse",
-#             "textAlign": "left"
-#         }
-#     )
-
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
-
-
 from pathlib import Path
 
 import pandas as pd
@@ -611,52 +316,44 @@ def update_kpis(selected_series):
     forecast_data = forecasts.copy()
     inventory_data = inventory.copy()
 
+    # Filter selected product/store
     if selected_series:
+        forecast_data = forecast_data[
+            forecast_data["id"].astype(str) == str(selected_series)
+        ]
 
-        if "id" in forecast_data.columns:
-            forecast_data = forecast_data[
-                forecast_data["id"].astype(str) == str(selected_series)
-            ]
+        inventory_data = inventory_data[
+            inventory_data["id"].astype(str) == str(selected_series)
+        ]
 
-        if "id" in inventory_data.columns:
-            inventory_data = inventory_data[
-                inventory_data["id"].astype(str) == str(selected_series)
-            ]
+    # 1. Total forecast series
+    total_series = forecast_data["id"].nunique()
 
-    total_series = (
-        forecast_data["id"].nunique()
-        if "id" in forecast_data.columns else 0
-    )
+    # 2. Total predicted demand
+    total_forecast = pd.to_numeric(
+        forecast_data["prediction"],
+        errors="coerce"
+    ).fillna(0).sum()
 
-    total_forecast = (
-        pd.to_numeric(
-            forecast_data["prediction"],
-            errors="coerce"
-        ).sum()
-        if "prediction" in forecast_data.columns else 0
-    )
-
-    total_orders = (
-        pd.to_numeric(
-            inventory_data["recommended_order"],
-            errors="coerce"
-        ).fillna(0).sum()
-        if "recommended_order" in inventory_data.columns else 0
-    )
+    # 3. Total recommended orders
+    total_orders = pd.to_numeric(
+        inventory_data["recommended_order"],
+        errors="coerce"
+    ).fillna(0).sum()
 
     return [
 
         metric_card(
             "Forecast Series",
             f"{total_series:,}",
-            "Selected product/store series",
+            "Number of product/store series",
             COLORS["primary"]
         ),
 
         metric_card(
             "Predicted Demand",
-            f"{total_forecast:,.0f}",
-            "Total forecasted units",
+            f"{total_forecast:,.2f}",
+            "Total predicted units",
             COLORS["green"]
         ),
 
@@ -668,6 +365,78 @@ def update_kpis(selected_series):
         )
 
     ]
+
+
+
+
+
+
+# @app.callback(
+#     Output("kpi-cards", "children"),
+#     Input("series-dropdown", "value")
+# )
+# def update_kpis(selected_series):
+
+#     forecast_data = forecasts.copy()
+#     inventory_data = inventory.copy()
+
+#     if selected_series:
+
+#         if "id" in forecast_data.columns:
+#             forecast_data = forecast_data[
+#                 forecast_data["id"].astype(str) == str(selected_series)
+#             ]
+
+#         if "id" in inventory_data.columns:
+#             inventory_data = inventory_data[
+#                 inventory_data["id"].astype(str) == str(selected_series)
+#             ]
+
+#     total_series = (
+#         forecast_data["id"].nunique()
+#         if "id" in forecast_data.columns else 0
+#     )
+
+#     total_forecast = (
+#         pd.to_numeric(
+#             forecast_data["prediction"],
+#             errors="coerce"
+#         ).sum()
+#         if "prediction" in forecast_data.columns else 0
+#     )
+
+#     total_orders = (
+#         pd.to_numeric(
+#             inventory_data["recommended_order"],
+#             errors="coerce"
+#         ).fillna(0).sum()
+#         if "recommended_order" in inventory_data.columns else 0
+#     )
+
+#     return [
+
+#         metric_card(
+#             "Forecast Series",
+#             f"{total_series:,}",
+#             "Selected product/store series",
+#             COLORS["primary"]
+#         ),
+
+#         metric_card(
+#             "Predicted Demand",
+#             f"{total_forecast:,.0f}",
+#             "Total forecasted units",
+#             COLORS["green"]
+#         ),
+
+#         metric_card(
+#             "Recommended Orders",
+#             f"{total_orders:,.0f}",
+#             "Units to replenish",
+#             COLORS["orange"]
+#         )
+
+#     ]
 
 
 # ==========================================================
@@ -802,19 +571,22 @@ def update_model_chart(selected_series):
     if comparison.empty:
         return empty_figure("Model comparison data not found")
 
-    if not {"model", "WAPE"}.issubset(comparison.columns):
-        return empty_figure("Expected model/WAPE columns not found")
+    comparison.columns = comparison.columns.str.strip().str.lower()
 
+    if not {"model", "wape"}.issubset(comparison.columns):
+        return empty_figure("Expected model/WAPE columns are missing")
+
+    
     fig = px.bar(
-        comparison,
-        x="model",
-        y="WAPE",
-        title="Model Comparison – WAPE",
-        text_auto=".2f",
-        labels={
-            "model": "Model",
-            "WAPE": "WAPE (%)"
-        }
+    comparison,
+    x="model",
+    y="wape",
+    title="Model Comparison – WAPE",
+    text_auto=".2f",
+    labels={
+        "model": "Model",
+        "wape": "WAPE (%)"
+    }
     )
 
     fig.update_traces(
@@ -913,5 +685,6 @@ if __name__ == "__main__":
     app.run(
         debug=True,
         host="127.0.0.1",
+        use_reloader=False,
         port=8050
     )
